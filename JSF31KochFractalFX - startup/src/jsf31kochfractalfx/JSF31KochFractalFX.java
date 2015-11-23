@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -58,6 +59,11 @@ public class JSF31KochFractalFX extends Application {
     
     Button buttonIncreaseLevel;
     Button buttonDecreaseLevel;
+    
+    //the progressBar
+    ProgressBar progressBar;
+    
+    Label progressLabel;
     
     @Override
     public void start(Stage primaryStage) {
@@ -132,6 +138,14 @@ public class JSF31KochFractalFX extends Application {
         });
         grid.add(buttonFitFractal, 14, 6);
         
+        progressBar = new ProgressBar();
+        progressBar.setProgress(0);
+        grid.add(progressBar, 3, 8);
+        
+        progressLabel = new Label();
+        progressLabel.setText(progressBar.getProgress() + "%");
+        grid.add(progressLabel, 14, 8);
+        
         // Add mouse clicked event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
             new EventHandler<MouseEvent>() {
@@ -159,13 +173,20 @@ public class JSF31KochFractalFX extends Application {
         });
         
         // Create Koch manager and set initial level
-        resetZoom();
-        kochManager = new KochManager(this);
-        kochManager.changeLevel(currentLevel);
+        final JSF31KochFractalFX that = this;
+        (new Thread()
+        {
+            @Override
+            public synchronized void run() {
+                resetZoom();
+                kochManager = new KochManager(that);
+                kochManager.changeLevel(currentLevel);
+            }
+        }).start();
         
         // Create the scene and add the grid pane
         Group root = new Group();
-        Scene scene = new Scene(root, kpWidth+50, kpHeight+170);
+        Scene scene = new Scene(root, kpWidth+50, kpHeight+250);
         root.getChildren().add(grid);
         
         // Define title and assign the scene for main window

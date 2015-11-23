@@ -10,6 +10,10 @@ import java.util.Observer;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -23,14 +27,18 @@ public class KochManager {
     private KochFractal kochFractal;
     TimeStamp timeStamp;
     
+    private ExecutorService pool;
+    
     public KochManager(JSF31KochFractalFX application)
     {
-        this.edgeList = new ArrayList<Edge>();
-        this.tempEdgeList = new ArrayList<Edge>();
+        this.edgeList = new ArrayList<>();
+        this.tempEdgeList = new ArrayList<>();
         this.application = application; //Add application
         
+        pool = Executors.newFixedThreadPool(3);
+        
         this.kochFractal = new KochFractal();
-        this.kochFractal.setLevel(1);
+//        this.kochFractal.setLevel(1);
         
         KochFractalObserver kochFractalObserver = new KochFractalObserver();//Create observer
         this.kochFractal.addObserver(kochFractalObserver);//Add observer
@@ -47,36 +55,40 @@ public class KochManager {
             timeStamp = new TimeStamp();
             timeStamp.setBegin("Begin berekenen van edges.");
 
-
-            final  Thread leftThread = new Thread()
+            final  Task leftTask = new Task()
             {
                 @Override
-                public synchronized void run() {
-                   kochFractal.generateLeftEdge();
-                   notify();
+                protected synchronized Object call() throws Exception
+                {
+                    Edge result = kochFractal.generateLeftEdge();
+                    return result;
                 }
             };
-            leftThread.start();
+//            leftThread.start();
             
-            final Thread bottomThread = new Thread()
+            final Task bottomTask = new Task()
             {
                 @Override
-                public synchronized void run() {
-                    kochFractal.generateBottomEdge();
-                    notify();
-                }
+                protected synchronized Object call() throws Exception
+                {
+                    return kochFractal.generateBottomEdge();
+                }                
             };
-            bottomThread.start();
+//            bottomThread.start();
 
-            final Thread rightThread = new Thread()
+            final Task rightTask = new Task()
             {
                 @Override
-                public synchronized void run() {
-                    kochFractal.generateRightEdge();
-                    notify();
-                }
+                protected synchronized Object call() throws Exception
+                {
+                    return kochFractal.generateRightEdge();
+                }                
             };
-            rightThread.start();
+//            rightThread.start();
+            
+            pool.execute(leftTask);
+            pool.execute(bottomTask);
+            pool.execute(rightTask);
             
             
             final Thread drawThread = new Thread()
@@ -86,9 +98,6 @@ public class KochManager {
                 {
                     try
                     {
-                        leftThread.join();
-                        bottomThread.join();
-                        rightThread.join();
                         timeStamp.setEnd("Edges berekend!");
                         application.setTextCalc(timeStamp.toString());
 
