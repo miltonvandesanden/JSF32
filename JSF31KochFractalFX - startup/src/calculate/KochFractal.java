@@ -4,6 +4,7 @@
  */
 package calculate;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import javafx.scene.paint.Color;
 
@@ -18,12 +19,14 @@ public class KochFractal extends Observable {
     private float hue;          // Hue value of color for next edge
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled 
 
-    private Edge drawKochEdge(double ax, double ay, double bx, double by, int n) {
+    private ArrayList<Edge> drawKochEdge(double ax, double ay, double bx, double by, int n) {
         Edge result = null;
+        ArrayList<Edge> edges = new ArrayList<>();
         if (!cancelled) {
             if (n == 1) {
                 hue = hue + 1.0f / nrOfEdges;
                 Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue*360.0, 1.0, 1.0));
+                edges.add(e);
                 this.setChanged();
                 this.notifyObservers(e);
                 
@@ -41,23 +44,23 @@ public class KochFractal extends Observable {
                 drawKochEdge((midabx + bx) / 2, (midaby + by) / 2, bx, by, n - 1);
             }
         }
-        return result;
+        return edges;
     }
 
-    public Edge generateLeftEdge() {
+    public ArrayList<Edge> generateLeftEdge() {
         hue = 0f;
         cancelled = false;
         return drawKochEdge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
         
     }
 
-    public Edge generateBottomEdge() {
+    public ArrayList<Edge> generateBottomEdge() {
         hue = 1f / 3f;
         cancelled = false;
         return drawKochEdge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
     }
 
-    public Edge generateRightEdge() {
+    public ArrayList<Edge> generateRightEdge() {
         hue = 2f / 3f;
         cancelled = false;
         return drawKochEdge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, level);

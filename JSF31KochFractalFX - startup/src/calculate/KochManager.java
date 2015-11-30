@@ -26,6 +26,7 @@ public class KochManager {
     private List<Edge> tempEdgeList; 
     private KochFractal kochFractal;
     TimeStamp timeStamp;
+    private KochManagerWorker kochManagerWorker;
     
     private ExecutorService pool;
     
@@ -42,53 +43,58 @@ public class KochManager {
         
         KochFractalObserver kochFractalObserver = new KochFractalObserver();//Create observer
         this.kochFractal.addObserver(kochFractalObserver);//Add observer
+        
+        kochManagerWorker = new KochManagerWorker(kochFractal);
     }
     
     public void changeLevel(final int nxt)
     {
         try
         {
-            this.tempEdgeList = new ArrayList<Edge>();
+            this.tempEdgeList = new ArrayList<>();
             
             this.kochFractal.setLevel(nxt);
             
             timeStamp = new TimeStamp();
             timeStamp.setBegin("Begin berekenen van edges.");
 
-            final  Task leftTask = new Task()
-            {
-                @Override
-                protected synchronized Object call() throws Exception
-                {
-                    Edge result = kochFractal.generateLeftEdge();
-                    return result;
-                }
-            };
-//            leftThread.start();
             
-            final Task bottomTask = new Task()
-            {
-                @Override
-                protected synchronized Object call() throws Exception
-                {
-                    return kochFractal.generateBottomEdge();
-                }                
-            };
-//            bottomThread.start();
-
-            final Task rightTask = new Task()
-            {
-                @Override
-                protected synchronized Object call() throws Exception
-                {
-                    return kochFractal.generateRightEdge();
-                }                
-            };
-//            rightThread.start();
+//            final  Task leftTask = new Task()
+//            {
+//                @Override
+//                protected synchronized Object call() throws Exception
+//                {
+//                    Edge result = kochFractal.generateLeftEdge();
+//                    return result;
+//                }
+//            };
+////            leftThread.start();
+//            
+//            final Task bottomTask = new Task()
+//            {
+//                @Override
+//                protected synchronized Object call() throws Exception
+//                {
+//                    return kochFractal.generateBottomEdge();
+//                }                
+//            };
+////            bottomThread.start();
+//
+//            final Task rightTask = new Task()
+//            {
+//                @Override
+//                protected synchronized Object call() throws Exception
+//                {
+//                    return kochFractal.generateRightEdge();
+//                }                
+//            };
+////            rightThread.start();
+//            
+//            pool.execute(leftTask);
+//            pool.execute(bottomTask);
+//            pool.execute(rightTask);
             
-            pool.execute(leftTask);
-            pool.execute(bottomTask);
-            pool.execute(rightTask);
+            
             
             
             final Thread drawThread = new Thread()
