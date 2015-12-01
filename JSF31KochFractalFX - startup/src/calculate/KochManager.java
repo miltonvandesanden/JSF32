@@ -57,6 +57,8 @@ public class KochManager {
             
             timeStamp = new TimeStamp();
             timeStamp.setBegin("Begin berekenen van edges.");
+            
+            kochManagerWorker.ChangeLevel();
 
             
 //            final  Task leftTask = new Task()

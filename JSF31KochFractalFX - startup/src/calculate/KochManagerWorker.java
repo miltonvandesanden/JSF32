@@ -18,9 +18,6 @@ public class KochManagerWorker
 {
     private CyclicBarrier cyclicBarrier;
     private KochFractal kochFractal;
-    private KochWorker kochWorkerLeft;
-    private KochWorker kochWorkerDown;
-    private KochWorker kochWorkerRight;
     private ExecutorService pool;
     
     public KochManagerWorker(KochFractal kochFractal)
@@ -29,15 +26,13 @@ public class KochManagerWorker
         
         pool = Executors.newFixedThreadPool(3);
         cyclicBarrier = new CyclicBarrier(3);
-        
-        for (int i = 1; i <= 3; i++)
-        {
-            pool.submit(new KochWorker(i, kochFractal, cyclicBarrier));
-        }
     }
     
     public void ChangeLevel()
     {
-        
+        for (int i = 1; i <= 3; i++)
+        {
+            pool.submit(new KochWorker(i, kochFractal, cyclicBarrier));
+        }
     }
 }
