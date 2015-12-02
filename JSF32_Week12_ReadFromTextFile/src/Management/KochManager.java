@@ -39,7 +39,7 @@ public class KochManager
         edges = new ArrayList<>();
         level = 1;
         
-        filePath = "/kochFractal.txt";
+        filePath = "kochFractal.txt";
         
         try
         {
@@ -59,73 +59,66 @@ public class KochManager
             timeStamp.setBegin("Begin uitlezen van edges.");
             
             int count = 1;
-            String rawData;
             
-            while (!bufferedReader.readLine().isEmpty())
+            level = Integer.parseInt(bufferedReader.readLine());
+            
+            String line;
+            
+            while ((line = bufferedReader.readLine()) != null)
             {
-                String line = bufferedReader.readLine();
                 double X1 = 0;
                 double Y1 = 0;
                 double X2 = 0;
                 double Y2 = 0;
                 Color color = new Color(0, 0, 0, 0);
                 
-                if(count == 1)
+                String[] parts = line.split(";");
+
+                for (int i = 0; i <= parts.length; i++)
                 {
-                    level = Integer.parseInt(line);
-                    
-                    count++;
-                }
-                else
-                {
-                    String[] parts = line.split(";");
-                    
-                    for (int i = 0; i < parts.length; i++)
+                    if (i == 0)
                     {
-                        if (i == 0)
+                        X1 = Double.parseDouble(parts[i]);
+                    }
+                    else if (i == 1)
+                    {
+                        Y1 = Double.parseDouble(parts[i]);
+                    }
+                    else if (i == 2)
+                    {
+                        X2 = Double.parseDouble(parts[i]);
+                    }
+                    else if (i == 3)
+                    {
+                        Y2 = Double.parseDouble(parts[i]);
+                    }
+                    else if (i == 4)
+                    {
+                        String colorString = parts[i];
+
+                        String[] colorParts = colorString.split(",");
+
+                        double red = 0;
+                        double green = 0;
+                        double blue = 0;
+
+                        for (int j = 0; j < colorParts.length; j++)
                         {
-                            X1 = Double.parseDouble(parts[i]);
-                        }
-                        else if (i == 1)
-                        {
-                            Y1 = Double.parseDouble(parts[i]);
-                        }
-                        else if (i == 2)
-                        {
-                            X2 = Double.parseDouble(parts[i]);
-                        }
-                        else if (i == 3)
-                        {
-                            Y2 = Double.parseDouble(parts[i]);
-                        }
-                        else if (1 ==4)
-                        {
-                            String colorString = parts[i];
-                            
-                            String[] colorParts = colorString.split(",");
-                            
-                            double red = 0;
-                            double green = 0;
-                            double blue = 0;
-                            
-                            for (int j = 0; j < colorParts.length; j++)
+                            if (j == 0)
                             {
-                                if (j == 0)
-                                {
-                                    red = Double.parseDouble(colorParts[j]);
-                                }
-                                else if (j == 1)
-                                {
-                                    green = Double.parseDouble(colorParts[j]);
-                                }
-                                else if (j == 2)
-                                {
-                                    blue = Double.parseDouble(colorParts[j]);
-                                }
+                                red = Double.parseDouble(colorParts[j]);
                             }
-                            
-                            color = new Color(red, green, blue, 1);
+                            else if (j == 1)
+                            {
+                                green = Double.parseDouble(colorParts[j]);
+                            }
+                            else if (j == 2)
+                            {
+                                blue = Double.parseDouble(colorParts[j]);
+                            }
                         }
+
+                        color = new Color(red, green, blue, 1);
                     }
                 }
                 

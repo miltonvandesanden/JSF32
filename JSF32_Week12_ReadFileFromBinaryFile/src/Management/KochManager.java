@@ -148,11 +148,10 @@ public class KochManager
             application.requestDrawEdges();
             application.setTextNrEdges(edges.size()+"");
         }
-        catch(IOException | NumberFormatException e)
+        catch (Exception exception)
         {
             
         }
-
     }
     
     
