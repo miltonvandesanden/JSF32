@@ -6,13 +6,11 @@
 package Management;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.paint.Color;
 import java.util.Scanner;
 import jsf32_week12_readfromtextfile.JSF32_Week12_ReadFromTextFile;
@@ -31,7 +29,7 @@ public class KochManager
     
     private String filePath;
     private FileReader fileReader;
-    private BufferedReader bufferedReader;
+//    private BufferedReader bufferedReader;
     private Scanner scanner;
     
     public KochManager(JSF32_Week12_ReadFromTextFile application)
@@ -41,19 +39,7 @@ public class KochManager
         edges = new ArrayList<>();
         level = 1;
         
-        filePath = "kochFractal.txt";
-        
-//        try
-//        {
-//            fileReader = new FileReader(filePath);
-//        } catch (FileNotFoundException ex)
-//        {
-//            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        bufferedReader = new BufferedReader(fileReader);
-//        
-//        scanner = new Scanner(bufferedReader);
-//        scanner.useDelimiter(";");
+        filePath = "kochFractal.txt";        
     }
     
     public void changeLevel(final int nxt) throws IOException
@@ -62,16 +48,20 @@ public class KochManager
         timeStamp.setBegin("Begin uitlezen van edges.");
         
         fileReader = new FileReader(filePath);
-        bufferedReader = new BufferedReader(fileReader);
+//        bufferedReader = new BufferedReader(fileReader);
+//        reader = new Reader(fileReader);
         
-        scanner = new Scanner(bufferedReader);
+//        scanner = new Scanner(bufferedReader);
+        scanner = new Scanner(fileReader);
         scanner.useDelimiter(";");
         
 
 //            int count = 1;
 
-        level = Integer.parseInt(bufferedReader.readLine());
+//        level = Integer.parseInt(bufferedReader.readLine());
 
+        level = Integer.parseInt(scanner.nextLine());
+        
         String line;
 
         int counter = 0;
