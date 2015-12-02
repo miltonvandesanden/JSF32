@@ -7,6 +7,9 @@ package jsf32_week12_readfromtextfile;
 
 import Management.Edge;
 import Management.KochManager;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -117,7 +120,13 @@ public class JSF32_Week12_ReadFromTextFile extends Application
         buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                increaseLevelButtonActionPerformed(event);
+                try
+                {
+                    increaseLevelButtonActionPerformed(event);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(JSF32_Week12_ReadFromTextFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         grid.add(buttonIncreaseLevel, 3, 6);
@@ -128,7 +137,13 @@ public class JSF32_Week12_ReadFromTextFile extends Application
         buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                decreaseLevelButtonActionPerformed(event);
+                try
+                {
+                    decreaseLevelButtonActionPerformed(event);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(JSF32_Week12_ReadFromTextFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         grid.add(buttonDecreaseLevel, 5, 6);
@@ -186,7 +201,13 @@ public class JSF32_Week12_ReadFromTextFile extends Application
             public synchronized void run() {
                 resetZoom();
                 kochManager = new KochManager(that);
-                kochManager.changeLevel(currentLevel);
+                try
+                {
+                    kochManager.changeLevel(currentLevel);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(JSF32_Week12_ReadFromTextFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }).start();
         
@@ -274,7 +295,7 @@ public class JSF32_Week12_ReadFromTextFile extends Application
         });
     }
     
-    private void increaseLevelButtonActionPerformed(ActionEvent event) {
+    private void increaseLevelButtonActionPerformed(ActionEvent event) throws IOException {
         if (currentLevel < 12) {
             buttonIncreaseLevel.setDisable(true);
             buttonDecreaseLevel.setDisable(true);
@@ -286,7 +307,7 @@ public class JSF32_Week12_ReadFromTextFile extends Application
         }
     } 
     
-    private void decreaseLevelButtonActionPerformed(ActionEvent event) {
+    private void decreaseLevelButtonActionPerformed(ActionEvent event) throws IOException {
         if (currentLevel > 1) {
             buttonIncreaseLevel.setDisable(true);
             buttonDecreaseLevel.setDisable(true);

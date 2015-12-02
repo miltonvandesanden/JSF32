@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
+import java.util.Scanner;
 import jsf32_week12_readfromtextfile.JSF32_Week12_ReadFromTextFile;
 
 /**
@@ -31,6 +32,7 @@ public class KochManager
     private String filePath;
     private FileReader fileReader;
     private BufferedReader bufferedReader;
+    private Scanner scanner;
     
     public KochManager(JSF32_Week12_ReadFromTextFile application)
     {
@@ -41,101 +43,167 @@ public class KochManager
         
         filePath = "kochFractal.txt";
         
-        try
-        {
-            fileReader = new FileReader(filePath);
-        } catch (FileNotFoundException ex)
-        {
-            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        bufferedReader = new BufferedReader(fileReader);
+//        try
+//        {
+//            fileReader = new FileReader(filePath);
+//        } catch (FileNotFoundException ex)
+//        {
+//            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        bufferedReader = new BufferedReader(fileReader);
+//        
+//        scanner = new Scanner(bufferedReader);
+//        scanner.useDelimiter(";");
     }
     
-    public void changeLevel(final int nxt)
+    public void changeLevel(final int nxt) throws IOException
     {
-        try
-        {
-            timeStamp = new TimeStamp();
-            timeStamp.setBegin("Begin uitlezen van edges.");
-            
-            int count = 1;
-            
-            level = Integer.parseInt(bufferedReader.readLine());
-            
-            String line;
-            
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                double X1 = 0;
-                double Y1 = 0;
-                double X2 = 0;
-                double Y2 = 0;
-                Color color = new Color(0, 0, 0, 0);
-                
-                String[] parts = line.split(";");
+        timeStamp = new TimeStamp();
+        timeStamp.setBegin("Begin uitlezen van edges.");
+        
+        fileReader = new FileReader(filePath);
+        bufferedReader = new BufferedReader(fileReader);
+        
+        scanner = new Scanner(bufferedReader);
+        scanner.useDelimiter(";");
+        
 
-                for (int i = 0; i <= parts.length; i++)
+//            int count = 1;
+
+        level = Integer.parseInt(bufferedReader.readLine());
+
+        String line;
+
+        int counter = 0;
+
+        double X1 = 0;
+        double Y1 = 0;
+        double X2 = 0;
+        double Y2 = 0;
+        Color color = new Color(0, 0, 0, 0);
+
+        while (scanner.hasNext())
+        {
+            line = scanner.next();
+
+            if (counter == 0)
+            {
+                X1 = Double.parseDouble(line);
+                counter++;
+            }
+            else if (counter == 1)
+            {
+                Y1 = Double.parseDouble(line);
+                counter++;
+            }
+            else if (counter == 2)
+            {
+                X2 = Double.parseDouble(line);
+                counter++;
+            }
+            else if (counter == 3)
+            {
+                Y2 = Double.parseDouble(line);
+                counter++;
+            }
+            else if (counter == 4)
+            {
+                String[] colorParts = line.split(",");
+
+                double red = 0;
+                double green = 0;
+                double blue = 0;
+
+                for (int i = 0; i < colorParts.length; i++)
                 {
                     if (i == 0)
                     {
-                        X1 = Double.parseDouble(parts[i]);
+                        red = Double.parseDouble(colorParts[i]);
                     }
                     else if (i == 1)
                     {
-                        Y1 = Double.parseDouble(parts[i]);
+                        green = Double.parseDouble(colorParts[i]);
                     }
                     else if (i == 2)
                     {
-                        X2 = Double.parseDouble(parts[i]);
-                    }
-                    else if (i == 3)
-                    {
-                        Y2 = Double.parseDouble(parts[i]);
-                    }
-                    else if (i == 4)
-                    {
-                        String colorString = parts[i];
-
-                        String[] colorParts = colorString.split(",");
-
-                        double red = 0;
-                        double green = 0;
-                        double blue = 0;
-
-                        for (int j = 0; j < colorParts.length; j++)
-                        {
-                            if (j == 0)
-                            {
-                                red = Double.parseDouble(colorParts[j]);
-                            }
-                            else if (j == 1)
-                            {
-                                green = Double.parseDouble(colorParts[j]);
-                            }
-                            else if (j == 2)
-                            {
-                                blue = Double.parseDouble(colorParts[j]);
-                            }
-                        }
+                        blue = Double.parseDouble(colorParts[i]);
 
                         color = new Color(red, green, blue, 1);
                     }
                 }
-                
+
                 edges.add(new Edge(X1, Y1, X2, Y2, color));
             }
+        }
+        
+        scanner.close();
+            
+//            while ((line = bufferedReader.readLine()) != null)
+//            {
+//                double X1 = 0;
+//                double Y1 = 0;
+//                double X2 = 0;
+//                double Y2 = 0;
+//                Color color = new Color(0, 0, 0, 0);
+//                
+//                String[] parts = line.split(";");
+//
+//                for (int i = 0; i <= parts.length; i++)
+//                {
+//                    if (i == 0)
+//                    {
+//                        X1 = Double.parseDouble(parts[i]);
+//                    }
+//                    else if (i == 1)
+//                    {
+//                        Y1 = Double.parseDouble(parts[i]);
+//                    }
+//                    else if (i == 2)
+//                    {
+//                        X2 = Double.parseDouble(parts[i]);
+//                    }
+//                    else if (i == 3)
+//                    {
+//                        Y2 = Double.parseDouble(parts[i]);
+//                    }
+//                    else if (i == 4)
+//                    {
+//                        String colorString = parts[i];
+//
+//                        String[] colorParts = colorString.split(",");
+//
+//                        double red = 0;
+//                        double green = 0;
+//                        double blue = 0;
+//
+//                        for (int j = 0; j < colorParts.length; j++)
+//                        {
+//                            if (j == 0)
+//                            {
+//                                red = Double.parseDouble(colorParts[j]);
+//                            }
+//                            else if (j == 1)
+//                            {
+//                                green = Double.parseDouble(colorParts[j]);
+//                            }
+//                            else if (j == 2)
+//                            {
+//                                blue = Double.parseDouble(colorParts[j]);
+//                            }
+//                        }
+//
+//                        color = new Color(red, green, blue, 1);
+//                    }
+//                }
+                
+//                edges.add(new Edge(X1, Y1, X2, Y2, color));
+//            }
             
             timeStamp.setEnd("Edges uitgelezen!");
             
             application.setTextCalc(timeStamp.toString());
             application.requestDrawEdges();
             application.setTextNrEdges(edges.size()+"");
-        }
-        catch(IOException | NumberFormatException e)
-        {
-            
-        }
-
     }
     
     
