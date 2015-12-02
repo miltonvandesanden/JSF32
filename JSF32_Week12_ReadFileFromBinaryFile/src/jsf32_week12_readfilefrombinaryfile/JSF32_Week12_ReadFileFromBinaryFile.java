@@ -7,6 +7,9 @@ package jsf32_week12_readfilefrombinaryfile;
 
 import Management.Edge;
 import Management.KochManager;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -184,7 +187,13 @@ public class JSF32_Week12_ReadFileFromBinaryFile extends Application
             @Override
             public synchronized void run() {
                 resetZoom();
-                kochManager = new KochManager(that);
+                try
+                {
+                    kochManager = new KochManager(that);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(JSF32_Week12_ReadFileFromBinaryFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 kochManager.changeLevel(currentLevel);
             }
         }).start();
