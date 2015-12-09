@@ -31,6 +31,7 @@ public class KochManager
     private FileReader fileReader;
 //    private BufferedReader bufferedReader;
     private Scanner scanner;
+    private Scanner scanner2;
     
     public KochManager(JSF32_Week12_ReadFromTextFile application)
     {
@@ -39,7 +40,7 @@ public class KochManager
         edges = new ArrayList<>();
         level = 1;
         
-        filePath = "kochFractal.txt";        
+        filePath = "C:\\Users\\milton\\Documents\\GitHub\\JSF32\\consoleNaarTekst\\consoleNaarTekst\\src\\kochFractal.txt";        
     }
     
     public void changeLevel(final int nxt) throws IOException
@@ -53,8 +54,7 @@ public class KochManager
         
 //        scanner = new Scanner(bufferedReader);
         scanner = new Scanner(fileReader);
-        scanner.useDelimiter(";");
-        
+        scanner.useDelimiter(System.lineSeparator());
 
 //            int count = 1;
 
@@ -62,67 +62,75 @@ public class KochManager
 
         level = Integer.parseInt(scanner.nextLine());
         
-        String line;
-
-        int counter = 0;
-
-        double X1 = 0;
-        double Y1 = 0;
-        double X2 = 0;
-        double Y2 = 0;
-        Color color = new Color(0, 0, 0, 0);
-
+        
         while (scanner.hasNext())
         {
-            line = scanner.next();
+            scanner2 = new Scanner(scanner.next());
+            scanner2.useDelimiter(";");
+            
+            String line;
 
-            if (counter == 0)
-            {
-                X1 = Double.parseDouble(line);
-                counter++;
-            }
-            else if (counter == 1)
-            {
-                Y1 = Double.parseDouble(line);
-                counter++;
-            }
-            else if (counter == 2)
-            {
-                X2 = Double.parseDouble(line);
-                counter++;
-            }
-            else if (counter == 3)
-            {
-                Y2 = Double.parseDouble(line);
-                counter++;
-            }
-            else if (counter == 4)
-            {
-                String[] colorParts = line.split(",");
+            int counter = 0;
 
-                double red = 0;
-                double green = 0;
-                double blue = 0;
+            double X1 = 0;
+            double Y1 = 0;
+            double X2 = 0;
+            double Y2 = 0;
+            Color color = new Color(0, 0, 0, 0);
 
-                for (int i = 0; i < colorParts.length; i++)
+            while (scanner2.hasNext())
+            {
+                line = scanner2.next();
+
+                if (counter == 0)
                 {
-                    if (i == 0)
-                    {
-                        red = Double.parseDouble(colorParts[i]);
-                    }
-                    else if (i == 1)
-                    {
-                        green = Double.parseDouble(colorParts[i]);
-                    }
-                    else if (i == 2)
-                    {
-                        blue = Double.parseDouble(colorParts[i]);
-
-                        color = new Color(red, green, blue, 1);
-                    }
+                    X1 = Double.parseDouble(line);
+                    counter++;
                 }
+                else if (counter == 1)
+                {
+                    X2 = Double.parseDouble(line);
+                    counter++;
+                }
+                else if (counter == 2)
+                {
+                    Y1 = Double.parseDouble(line);
+                    counter++;
+                }
+                else if (counter == 3)
+                {
+                    Y2 = Double.parseDouble(line);
+                    counter++;
+                }
+                else if (counter == 4)
+                {
+                    String[] colorParts = line.split(",");
 
-                edges.add(new Edge(X1, Y1, X2, Y2, color));
+                    double red = 0;
+                    double green = 0;
+                    double blue = 0;
+
+                    for (int i = 0; i < colorParts.length; i++)
+                    {
+                        if (i == 0)
+                        {
+                            red = Double.parseDouble(colorParts[i]);
+                        }
+                        else if (i == 1)
+                        {
+                            green = Double.parseDouble(colorParts[i]);
+                        }
+                        else if (i == 2)
+                        {
+                            String string = colorParts[i];
+                            blue = Double.parseDouble(colorParts[i]);
+
+                            color = new Color(red, green, blue, 1);
+                        }
+                    }
+
+                    edges.add(new Edge(X1, Y1, X2, Y2, color));
+                }
             }
         }
         

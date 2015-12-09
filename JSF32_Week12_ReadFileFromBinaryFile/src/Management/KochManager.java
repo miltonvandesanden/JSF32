@@ -5,14 +5,14 @@
  */
 package Management;
 
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.scene.paint.Color;
 import jsf32_week12_readfilefrombinaryfile.JSF32_Week12_ReadFileFromBinaryFile;
 
 /**
@@ -28,8 +28,8 @@ public class KochManager
     private int level;
     
     private String filePath;
-    private FileInputStream fileInputStream;
-    private ObjectInputStream objectInputStream;
+    
+    private DataInputStream dataInputStream;
     
     public KochManager(JSF32_Week12_ReadFileFromBinaryFile application) throws FileNotFoundException, IOException
     {
@@ -38,10 +38,9 @@ public class KochManager
         edges = new ArrayList<>();
         level = 1;
         
-        filePath = "/kochFractal.txt";
+        filePath = "C:\\Users\\milton\\Documents\\GitHub\\JSF32\\consoleNaarTekst\\consoleNaarTekst\\src\\kochFractal.bin";
         
-        fileInputStream = new FileInputStream(filePath);
-        objectInputStream = new ObjectInputStream(fileInputStream);
+        dataInputStream = new DataInputStream(new FileInputStream(filePath));
     }
     
     public void changeLevel(final int nxt)
@@ -51,9 +50,31 @@ public class KochManager
             timeStamp = new TimeStamp();
             timeStamp.setBegin("Begin uitlezen van edges.");
             
-            Edge edge = (Edge) objectInputStream.readObject();
+            if (dataInputStream.available() > 0)
+            {
+                int level = dataInputStream.readInt();
+
+                while(dataInputStream.available() > 0)
+                {
+
+                    double X1 = dataInputStream.readDouble();
+                    double Y1 = dataInputStream.readDouble();
+                    double X2 = dataInputStream.readDouble();
+                    double Y2 = dataInputStream.readDouble();
+
+                    double red = dataInputStream.readDouble();
+                    double green = dataInputStream.readDouble();
+                    double blue = dataInputStream.readDouble();
+
+                    edges.add(new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1)));
+                }                
+            }
+                        
+//            Edge edge = (Edge) dataInputStream.
+//            
+//            edges.add(edge);
             
-            edges.add(edge);
+            
                         
             timeStamp.setEnd("Edges uitgelezen!");
             

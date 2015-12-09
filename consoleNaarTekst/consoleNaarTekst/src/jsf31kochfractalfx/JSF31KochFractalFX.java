@@ -24,6 +24,7 @@ import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import sun.nio.cs.ext.SJIS;
 
 /**
  *
@@ -57,7 +58,7 @@ public class JSF31KochFractalFX extends Application {
     
     public void drawEdge(List<Edge> e) {
         try {
-            //writeText(e);
+//            writeText(e);
             //bufferWriteText(e);
             writeBinaryText(e);
             //bufferWriteBinaryText(e);
@@ -94,11 +95,11 @@ public class JSF31KochFractalFX extends Application {
         String path = "src/kochFractal.txt";
         FileWriter fw = new FileWriter(path);
         
-        fw.write(level + "\n");
+        fw.write(level + System.lineSeparator());
         
         for(Edge e : el) {
             fw.write(e.X1 + ";" + e.X2 + ";" + e.Y1 + ";" + e.Y2 + ";" + e.color.getRed() + "," + e.color.getBlue() + "," + e.color.getGreen());
-            fw.write("\n");
+            fw.write(System.lineSeparator());
         }
         
         fw.close();
