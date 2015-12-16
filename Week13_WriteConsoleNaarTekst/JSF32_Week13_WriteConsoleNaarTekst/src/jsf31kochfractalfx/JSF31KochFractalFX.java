@@ -59,10 +59,11 @@ public class JSF31KochFractalFX extends Application {
     
     public void drawEdge(List<Edge> e) {
         try {
-//            writeText(e);
+            writeText(e);
             //bufferWriteText(e);
-            writeBinaryText(e);
+            //writeBinaryText(e);
             //bufferWriteBinaryText(e);
+            //randomWriter(e);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -106,24 +107,7 @@ public class JSF31KochFractalFX extends Application {
         fw.close();
     }
     
-    private void bufferWriteText(List<Edge> el) throws IOException {
-        String path = "src/kochFractal.txt";
-        FileWriter fw = new FileWriter(path);
-        BufferedWriter bw = new BufferedWriter(fw);
-        
-        bw.write(level+"");
-        bw.newLine();
-        
-        for(Edge e : el) {
-            bw.write(e.X1 + ";" + e.X2 + ";" + e.Y1 + ";" + e.Y2 + ";" + e.color.getRed() + "," + e.color.getBlue() + "," + e.color.getGreen());
-            bw.newLine();
-        }
-        
-        bw.close();
-        fw.close();
-    }
-    
-    private void writeBinaryText(List<Edge> el) throws IOException {
+    private void randomWriter(List<Edge> el) throws FileNotFoundException, IOException {
         String path = "src/kochFractal.bin";
         RandomAccessFile randomAccessFile = new RandomAccessFile(path, "rw");
         
@@ -141,6 +125,29 @@ public class JSF31KochFractalFX extends Application {
         }
         
         randomAccessFile.close();
+    }
+    
+    private void bufferWriteText(List<Edge> el) throws IOException {
+        String path = "src/kochFractal.txt";
+        FileWriter fw = new FileWriter(path);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write(level+"");
+        bw.newLine();
+        
+        for(Edge e : el) {
+            bw.write(e.X1 + ";" + e.X2 + ";" + e.Y1 + ";" + e.Y2 + ";" + e.color.getRed() + "," + e.color.getBlue() + "," + e.color.getGreen());
+            bw.newLine();
+        }
+        
+        bw.close();
+        fw.close();
+    }
+    
+    
+    
+    private void writeBinaryText(List<Edge> el) throws IOException {
+        String path = "src/kochFractal.bin";
 //        DataOutputStream dos = new DataOutputStream(new FileOutputStream(path));
 //        dos.writeInt(level);
 //        for(Edge e : el)

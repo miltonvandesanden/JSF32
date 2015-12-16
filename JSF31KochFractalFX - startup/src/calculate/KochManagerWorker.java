@@ -49,6 +49,6 @@ public class KochManagerWorker
         }
         
         List<Edge> edges = new ArrayList<>();
-        
+        return edges;
     }
 }

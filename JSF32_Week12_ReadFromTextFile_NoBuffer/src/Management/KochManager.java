@@ -40,7 +40,7 @@ public class KochManager
         edges = new ArrayList<>();
         level = 1;
         
-        filePath = "C:\\Users\\milton\\Documents\\GitHub\\JSF32\\consoleNaarTekst\\consoleNaarTekst\\src\\kochFractal.txt";        
+        filePath = "src\\kochFractal.txt";        
     }
     
     public void changeLevel(final int nxt) throws IOException
