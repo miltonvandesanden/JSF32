@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="JSF32_Week14_BinairyFileMapUpdate.jnlp">
+  <information>
+    <title>JSF32_Week14_BinairyFileMapUpdate</title>
+    <vendor>milton</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="JSF32_Week14_BinairyFileMapUpdate.jar" size="41208" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="JSF32_Week14_BinairyFileMapUpdate" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="jsf32_week14_readfilefrombinaryfile.JSF32_Week12_ReadFileFromBinaryFile"  name="JSF32_Week14_BinairyFileMapUpdate" />
+  <update check="always"/>
+</jnlp>
