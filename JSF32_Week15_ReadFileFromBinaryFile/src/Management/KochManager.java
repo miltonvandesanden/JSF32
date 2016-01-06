@@ -9,7 +9,11 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
@@ -43,8 +47,57 @@ public class KochManager
         dataInputStream = new DataInputStream(new FileInputStream(filePath));
     }
     
-    public void changeLevel(final int nxt)
+    public void changeLevel(final int nxt) throws Exception
     {
+        try
+        {
+            Socket socket = new Socket("localhost", 8189);
+            
+            try
+            {
+                OutputStream outputStream = socket.getOutputStream();
+                InputStream inputStream = socket.getInputStream();
+                
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                
+                System.out.println("sending lvl");
+                objectOutputStream.writeObject(nxt);
+                objectOutputStream.flush();
+                
+                List<Edge> edges = (List<Edge>)objectInputStream.readObject();
+                System.out.println("ontvangen antwoord: " + edges.toString());
+                
+                double X1 = dataInputStream.readDouble();
+                double Y1 = dataInputStream.readDouble();
+                double X2 = dataInputStream.readDouble();
+                double Y2 = dataInputStream.readDouble();
+
+                double red = dataInputStream.readDouble();
+                double green = dataInputStream.readDouble();
+                double blue = dataInputStream.readDouble();
+
+                edges.add(new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1)));
+
+            } catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                socket.close();
+            }
+        } catch (IOException e)
+        {
+            throw e;
+        }
+        catch (ClassNotFoundException nfe)
+        {
+            throw nfe;
+        }
+        
+        
+        /*
         try
         {
             timeStamp = new TimeStamp();
@@ -86,6 +139,7 @@ public class KochManager
         {
             
         }
+        */
     }
     
     
