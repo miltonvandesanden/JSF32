@@ -59,3 +59,10 @@ Temporary Items
 /JSF32_Week15_WriteConsoleNaarTekst/nbproject/private/
 /JSF32_Week15_ReadFileFromBinaryFile/build/
 /JSF32_Week15_WriteConsoleNaarTekst/build/
+/JSF32_Week14_ReadWriteFromBinaryFile/JSF32_Week14_ReadWriteFromBinaryFile/nbproject/private/
+*.bin
+/JSF32_Week14_BinairyFileMapUpdate/nbproject/private/
+/JSF32_Week14_BinairyFileMapUpdate_B/nbproject/private/
+/JSF32_Week14_BinairyFileMapUpdate/build/
+*.class
+*.class
