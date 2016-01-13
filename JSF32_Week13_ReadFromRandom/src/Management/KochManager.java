@@ -49,7 +49,8 @@ public class KochManager
         
         RandomAccessFile raFile = new RandomAccessFile(filePath, "r");
 
-        level = raFile.readInt();
+//        level = raFile.readInt();
+        level = Integer.parseInt(raFile.readLine());
         
         String line = "";
         double X1 = 0;
@@ -65,6 +66,7 @@ public class KochManager
             line = raFile.readLine();
             String[] vals = line.split(";");
             
+            System.out.println("babla: " + vals[0]);
             X1 = Double.parseDouble(vals[0]);
             X2 = Double.parseDouble(vals[1]);
             Y1 = Double.parseDouble(vals[2]);

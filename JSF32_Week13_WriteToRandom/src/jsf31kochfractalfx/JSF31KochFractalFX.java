@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.logging.Level;
@@ -123,20 +124,52 @@ public class JSF31KochFractalFX extends Application {
     }
     
     private void writeBinaryText(List<Edge> el) throws IOException {
-        String path = "src/kochFractal.bin";
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(path));
-        dos.writeInt(level);
-        for(Edge e : el)
+        String path = "src/kochFractal.txt";
+        
+        RandomAccessFile randomAccessFile = new RandomAccessFile(path, "rw");
+        
+        randomAccessFile.writeBytes("" + level);
+        randomAccessFile.writeBytes(System.getProperty("line.separator"));
+        
+        for (Edge edge : el)
         {
-            dos.writeDouble(e.X1);
-            dos.writeDouble(e.Y1);
-            dos.writeDouble(e.X2);
-            dos.writeDouble(e.Y2);
-            dos.writeDouble(e.color.getRed());
-            dos.writeDouble(e.color.getGreen());
-            dos.writeDouble(e.color.getBlue());
+            randomAccessFile.writeBytes("" + edge.X1);
+//            randomAccessFile.writeDouble(edge.X1);
+            randomAccessFile.writeBytes(";");
+            randomAccessFile.writeBytes("" + edge.X2);
+//            randomAccessFile.writeDouble(edge.X2);
+            randomAccessFile.writeBytes(";");
+            randomAccessFile.writeBytes("" + edge.Y1);
+//            randomAccessFile.writeDouble(edge.Y1);
+            randomAccessFile.writeBytes(";");
+            randomAccessFile.writeBytes("" + edge.Y2);
+//            randomAccessFile.writeDouble(edge.Y2);
+            randomAccessFile.writeBytes(";");
+            randomAccessFile.writeBytes("" + edge.color.getRed());
+//            randomAccessFile.writeDouble(edge.color.getRed());
+            randomAccessFile.writeBytes(",");
+            randomAccessFile.writeBytes("" + edge.color.getGreen());
+//            randomAccessFile.writeDouble(edge.color.getGreen());
+            randomAccessFile.writeBytes(",");
+            randomAccessFile.writeBytes("" + edge.color.getBlue());
+//            randomAccessFile.writeDouble(edge.color.getBlue());
+            
+            randomAccessFile.writeBytes(System.getProperty("line.separator"));
         }
-        dos.close();
+//        
+//        DataOutputStream dos = new DataOutputStream(new FileOutputStream(path));
+//        dos.writeInt(level);
+//        for(Edge e : el)
+//        {
+//            dos.writeDouble(e.X1);
+//            dos.writeDouble(e.Y1);
+//            dos.writeDouble(e.X2);
+//            dos.writeDouble(e.Y2);
+//            dos.writeDouble(e.color.getRed());
+//            dos.writeDouble(e.color.getGreen());
+//            dos.writeDouble(e.color.getBlue());
+//        }
+//        dos.close();
     }
     
     private void bufferWriteBinaryText(List<Edge> el) throws IOException {
