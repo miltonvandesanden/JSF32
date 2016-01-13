@@ -67,3 +67,5 @@ Temporary Items
 *.class
 *.class
 /JSF32_Week13_ReadFromRandom/nbproject/private/
+/JSF32_Week14_BinairyFileMapUpdate_B/build/
+/JSF32_Week14_BinairyFileMapUpdate_B/dist/

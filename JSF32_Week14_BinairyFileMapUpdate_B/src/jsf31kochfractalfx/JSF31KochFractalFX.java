@@ -20,6 +20,8 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,8 +41,7 @@ public class JSF31KochFractalFX extends Application {
     // Koch manager
     private KochManager kochManager;
     private int level;
-    String path = "src/kochFractal.bin";
-    String tempPath = "src/kochFractal_w.bin";
+    String path = "src/kochFractal.txt";
     
     boolean busy = true;
     
@@ -58,23 +59,6 @@ public class JSF31KochFractalFX extends Application {
             System.err.println("Invalid Format!");
         } catch (IOException ex) {
             Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        // Rename file so we cant read it
-        old = new File(path);
-        write = new File(tempPath);
-        old.delete();
-        
-        if(write.exists()) 
-        {
-            System.err.println("Somebody else is already writing to file. Appliciation shutting down.");
-            System.exit(0);
-        } else {
-            try {
-                write.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         
         kochManager = new KochManager(this);
@@ -117,24 +101,36 @@ public class JSF31KochFractalFX extends Application {
     private void writeBinaryText(List<Edge> el) throws IOException {
         System.out.println("Start Writing");
         
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(write.getPath()));
+        File file = new File(path);
+        if(file.exists())
+            file.delete();
+        file.createNewFile();
+        
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        FileChannel fc = raf.getChannel();
+        
+        FileLock lock;
 
-        dos.writeInt(level);
+        raf.writeInt(level);
+        raf.writeBytes("\n");
+        
+        String line = "";
         for(Edge e : el)
         {
-            dos.writeDouble(e.X1);
-            dos.writeDouble(e.Y1);
-            dos.writeDouble(e.X2);
-            dos.writeDouble(e.Y2);
-            dos.writeDouble(e.color.getRed());
-            dos.writeDouble(e.color.getGreen());
-            dos.writeDouble(e.color.getBlue());
-        }            
-        dos.close();
-
-        if(write.renameTo(old))
-            System.out.println("Writing done!");
+            line = "";
+            line += e.X1 + ";";
+            line += e.Y1 + ";";
+            line += e.X2 + ";";
+            line += e.Y2 + ";";
+            line += e.color.getRed() + ",";
+            line += e.color.getGreen() + ",";
+            line += e.color.getBlue() + "\n";
             
-
+            lock = fc.lock(raf.length(), line.getBytes().length, false);
+            raf.writeBytes(line);
+            lock.release();
+        }
+        
+        raf.close();
     }
 }

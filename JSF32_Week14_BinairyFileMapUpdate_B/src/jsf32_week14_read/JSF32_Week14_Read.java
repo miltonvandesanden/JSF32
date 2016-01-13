@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jsf32_week14_readfilefrombinaryfile;
+package jsf32_week14_read;
 
 import Read.Edge;
 import Read.KochManager;
@@ -31,12 +31,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import static javafx.application.Application.launch;
 
 /**
  *
  * @author milton
  */
-public class JSF32_Week12_ReadFileFromBinaryFile extends Application
+public class JSF32_Week14_Read extends Application
 {
     // Zoom and drag
     private double zoomTranslateX = 0.0;
@@ -67,9 +68,6 @@ public class JSF32_Week12_ReadFileFromBinaryFile extends Application
     private Canvas kochPanel;
     private final int kpWidth = 500;
     private final int kpHeight = 500;
-    
-    String path = "src/kochFractal.bin";
-    String tempPath = "src/kochFractal_w.bin";
     
     //the progressBar
     ProgressBar progressBar;
@@ -154,7 +152,7 @@ public class JSF32_Week12_ReadFileFromBinaryFile extends Application
         });
         
         // Create Koch manager and set initial level
-        final JSF32_Week12_ReadFileFromBinaryFile that = this;
+        final JSF32_Week14_Read that = this;
         Thread start = new Thread()
         {
             @Override
@@ -165,7 +163,7 @@ public class JSF32_Week12_ReadFileFromBinaryFile extends Application
                     kochManager = new KochManager(that);
                 } catch (IOException ex)
                 {
-                    Logger.getLogger(JSF32_Week12_ReadFileFromBinaryFile.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JSF32_Week14_Read.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 kochManager.changeLevel(currentLevel);
             }
@@ -181,12 +179,12 @@ public class JSF32_Week12_ReadFileFromBinaryFile extends Application
         primaryStage.setTitle("Waiting...");
         primaryStage.show();
      
-        while(new File(tempPath).exists() || !new File(path).exists())
+        while(!new File("src/kochFractal.txt").exists())
         {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(JSF32_Week12_ReadFileFromBinaryFile.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JSF32_Week14_Read.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         primaryStage.setTitle("KochFractal!");
