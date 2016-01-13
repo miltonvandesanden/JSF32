@@ -60,14 +60,18 @@ public class KochManager
             timeStamp.setBegin("Begin uitlezen van edges.");
             
             Socket socket = new Socket(ip, port);
+            OutputStream outputStream;
+            InputStream inputStream;
+            ObjectOutputStream objectOutputStream;
+            ObjectInputStream objectInputStream;
             
             try
             {
-                OutputStream outputStream = socket.getOutputStream();
-                InputStream inputStream = socket.getInputStream();
+                outputStream = socket.getOutputStream();
+                inputStream = socket.getInputStream();
 
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                objectOutputStream = new ObjectOutputStream(outputStream);
+                objectInputStream = new ObjectInputStream(inputStream);
                 
                 System.out.println("sending level: " + nxt);
                 objectOutputStream.writeBytes("" + nxt);
@@ -110,6 +114,10 @@ public class KochManager
                 }
             } catch (Exception e)
             {
+            }
+            finally
+            {
+                socket.close();                
             }
 //            
 //            if (dataInputStream.available() > 0)

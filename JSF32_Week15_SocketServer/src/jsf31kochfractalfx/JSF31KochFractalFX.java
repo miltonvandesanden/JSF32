@@ -69,7 +69,7 @@ public class JSF31KochFractalFX extends Application {
 //        kochManager = new KochManager(this);
 //        kochManager.changeLevel(level);
         
-        serverSocket = new ServerSocket(port);        
+        serverSocket = new ServerSocket(port);
         incomingSocket = serverSocket.accept();
         
         try
@@ -85,13 +85,17 @@ public class JSF31KochFractalFX extends Application {
                 
             }
             String result = (String) objectInputStream.readObject();
-            
+
             int level = Integer.parseInt(result);
             
             kochManager = new KochManager(this);
             kochManager.changeLevel(level);
         } catch (Exception e)
         {
+        }
+        finally
+        {
+            incomingSocket.close();
         }
         
     }
