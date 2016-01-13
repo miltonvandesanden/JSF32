@@ -13,10 +13,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,22 +43,56 @@ public class JSF31KochFractalFX extends Application {
     private KochManager kochManager;
     private int level;
     
-    public void start(Stage primaryStage) {
-        level = 1;
+    private int port = 8189;
+    private ServerSocket serverSocket;
+    Socket incomingSocket;
+    OutputStream outputStream;
+    InputStream inputStream;
+    ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
+    
+    public void start(Stage primaryStage) throws IOException {
+//        writeBinaryText(new ArrayList<Edge>());
+       
+//        level = 1;
+//        
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        System.out.print("Level to generate: ");
+//        try{
+//            level = Integer.parseInt(br.readLine());
+//        }catch(NumberFormatException nfe){
+//            System.err.println("Invalid Format!");
+//        } catch (IOException ex) {
+//            Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        kochManager = new KochManager(this);
+//        kochManager.changeLevel(level);
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Level to generate: ");
-        try{
-            level = Integer.parseInt(br.readLine());
-        }catch(NumberFormatException nfe){
-            System.err.println("Invalid Format!");
-        } catch (IOException ex) {
-            Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+        serverSocket = new ServerSocket(port);        
+        incomingSocket = serverSocket.accept();
+        
+        try
+        {
+            outputStream = incomingSocket.getOutputStream();
+            inputStream = incomingSocket.getInputStream();
+            
+            objectInputStream = new ObjectInputStream(inputStream);
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            
+            while(objectInputStream.available() < 1)
+            {
+                
+            }
+            String result = (String) objectInputStream.readObject();
+            
+            int level = Integer.parseInt(result);
+            
+            kochManager = new KochManager(this);
+            kochManager.changeLevel(level);
+        } catch (Exception e)
+        {
         }
-        
-        kochManager = new KochManager(this);
-        kochManager.changeLevel(level);
-        
         
     }
     
@@ -123,20 +163,60 @@ public class JSF31KochFractalFX extends Application {
     }
     
     private void writeBinaryText(List<Edge> el) throws IOException {
-        String path = "src/kochFractal.bin";
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(path));
-        dos.writeInt(level);
-        for(Edge e : el)
+//        String path = "src/kochFractal.bin";
+//        DataOutputStream dos = new DataOutputStream(new FileOutputStream(path));
+//        dos.writeInt(level);
+//        for(Edge e : el)
+//        {
+//            dos.writeDouble(e.X1);
+//            dos.writeDouble(e.Y1);
+//            dos.writeDouble(e.X2);
+//            dos.writeDouble(e.Y2);
+//            dos.writeDouble(e.color.getRed());
+//            dos.writeDouble(e.color.getGreen());
+//            dos.writeDouble(e.color.getBlue());
+//        }
+//        dos.close();
+        
+////        ServerSocket serverSocket = new ServerSocket(port);
+////        
+////        Socket incomingSocket = serverSocket.accept();
+////        
+////        try
+////        {
+////            OutputStream outputStream = incomingSocket.getOutputStream();
+////            InputStream inputStream = incomingSocket.getInputStream();
+////            
+////            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+////            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+////            
+////            while(objectInputStream.available() < 1)
+////            {
+////                
+////            }
+////            String result = (String) objectInputStream.readObject();
+////            
+////            int level = Integer.parseInt(result);
+////            
+////            kochManager = new KochManager(this);
+////            kochManager.changeLevel(level);
+//        } catch (Exception e)
+//        {
+//        }
+        
+        String message = "";
+        
+        for (Edge edge : el)
         {
-            dos.writeDouble(e.X1);
-            dos.writeDouble(e.Y1);
-            dos.writeDouble(e.X2);
-            dos.writeDouble(e.Y2);
-            dos.writeDouble(e.color.getRed());
-            dos.writeDouble(e.color.getGreen());
-            dos.writeDouble(e.color.getBlue());
+            message += edge.X1 + ";" + edge.Y1 + ";" + edge.X2 + ";" + edge.Y2 + ";" + edge.color.getRed() + "," + edge.color.getGreen() + "," + edge.color.getBlue();
+            
+            if (edge != el.get(el.size() - 1))
+            {
+                message += "-";
+            }
         }
-        dos.close();
+        
+        objectOutputStream.writeChars(message);
     }
     
     private void bufferWriteBinaryText(List<Edge> el) throws IOException {
